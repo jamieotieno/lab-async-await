@@ -1,66 +1,38 @@
 // Write your code here!
-
-// Fetch Data from API
-const apiUrl = "https://jsonplaceholder.typicode.com/"
-
+const API_URL = "https://jsonplaceholder.typicode.com/posts";
+ 
+//Fetch API
 async function fetchPosts() {
-  try {
-    const response = await fetch(apiUrl);
-     if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
+  const response = await fetch(API_URL);
 
-    const posts = await response.json();
-
-    console.log("Fetched posts:", posts);
-
-    return posts;
-  } catch (error) {
-    console.error("Error fetching posts:", error);
+  if (!response.ok) {
+    throw new Error("Failed to fetch posts");
   }
+
+  return await response.json();
 }
 
-// Display Posts
-
+//Display Posts
 function displayPosts(posts) {
-  const container = document.getElementById("post-list");
- container.innerHTML = "";
+  const ul = document.getElementById("post-list");
 
-  // clear existing content
-  ul.innerHTML = "";  
+  if (!ul) {
+    throw new Error("Missing #post-list in HTML");
+  }
 
-// Loop through posts array
-   posts.forEach(post => { 
+  ul.innerHTML = "";
 
-      const postElement = document.createElement("div");
-    postElement.classList.add("post");
-
-    postElement.innerHTML = `
-      <h3>${post.title}</h3>
-      <p>${post.body}</p>
-    `;
-
-    container.appendChild(postElement);
-    
-    // create li
+  posts.forEach(post => {
     const li = document.createElement("li");
 
-    // create h1 and set title
     const h1 = document.createElement("h1");
-   
-
-    // create p and set body
     const p = document.createElement("p");
-    
 
     h1.textContent = post.title;
     p.textContent = post.body;
 
-    // append h1 and p to li
     li.appendChild(h1);
     li.appendChild(p);
-
-    // append li to ul
     ul.appendChild(li);
   });
 }
